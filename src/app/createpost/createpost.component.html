@@ -1,0 +1,11 @@
+<div class="row" style="margin-top: 20px; margin-left: 20px;">
+  <input class="col-md-4 form-control" type="text" placeholder="Title" [(ngModel)]="postTitle">
+  <input class="col-md-4 form-control" type="textarea" placeholder="Description" [(ngModel)]="postContent"
+    style="margin-left: 10px;">
+  <!-- <textarea class="col-md-4 form-control" placeholder="Description" [(ngModel)]="postContent" rows="3" style="margin-left: 10px;"></textarea> -->
+  <button *ngIf="mode == 'create'" class="btn btn-primary" (click)="onSavePost()" style="margin-left: 10px;" routerLink="/allposts">Add
+    Post</button>
+  <button *ngIf="mode == 'edit'" class="btn btn-primary" (click)="onSavePost()" style="margin-left: 10px;" routerLink="/allposts">Update
+    Post</button>
+  <button class="btn btn-secondary" routerLink="/allposts" style="margin-left: 10px;">Cancel</button>
+</div>
