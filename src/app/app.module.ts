@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import {HttpClientModule} from '@angular/common/http'
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CreatepostComponent } from './createpost/createpost.component';
 import { AllpostsComponent } from './allposts/allposts.component';
 @NgModule({
@@ -18,7 +18,7 @@ import { AllpostsComponent } from './allposts/allposts.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

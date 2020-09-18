@@ -9,7 +9,8 @@ const routes = require("./routes/posts");
 //Connect to MongoDB Database
 mongoose
   .connect(
-    "Paste you MongoDB Connection String Here",
+    // "Paste you MongoDB Connection String",
+    "mongodb+srv://guru:FJlIXNHRBpVb8iM8@cluster0.b7qnq.mongodb.net/test?retryWrites=true&w=majority",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {

@@ -1,11 +1,37 @@
-<div class="row" style="margin-top: 20px; margin-left: 20px;">
-  <input class="col-md-4 form-control" type="text" placeholder="Title" [(ngModel)]="postTitle">
-  <input class="col-md-4 form-control" type="textarea" placeholder="Description" [(ngModel)]="postContent"
-    style="margin-left: 10px;">
+<form [formGroup]="myForm" (ngSubmit)="onSavePost()">
+  <input class="col-md-3 form-control" type="text" placeholder="Title" formControlName="postTitle">
+
+  <span *ngIf="myForm.get('postTitle').invalid && myForm.get('postTitle').touched" class="">Please enter a valid
+    username! </span>
+  <!-- <div *ngIf="myForm.controls.postTitle.errors.maxlength">
+    Longer Text!
+  </div> -->
+
+  <input class="col-md-3 form-control" type="text" placeholder="Description" formControlName="postContent">
+
+  <div *ngIf="myForm.get('postContent').hasError('required')">
+    Oops, please provide a Title!
+  </div>
+
   <!-- <textarea class="col-md-4 form-control" placeholder="Description" [(ngModel)]="postContent" rows="3" style="margin-left: 10px;"></textarea> -->
-  <button *ngIf="mode == 'create'" class="btn btn-primary" (click)="onSavePost()" style="margin-left: 10px;" routerLink="/allposts">Add
-    Post</button>
-  <button *ngIf="mode == 'edit'" class="btn btn-primary" (click)="onSavePost()" style="margin-left: 10px;" routerLink="/allposts">Update
-    Post</button>
+  <button class="btn btn-primary" type="submit"> Add Post </button>
+
+  <button class="btn btn-primary" (click)="filePicker.click()" style="margin-left: 10px;">Upload Image</button>
+  <input type="file" #filePicker formControlName="postImage">
+
+  <button *ngIf="mode == 'edit'" class="btn btn-primary" (click)="onSavePost()" style="margin-left: 10px;"
+    routerLink="/allposts"> Update Post</button>
+
   <button class="btn btn-secondary" routerLink="/allposts" style="margin-left: 10px;">Cancel</button>
-</div>
+
+</form>
+<style>
+  input[type='file'] {
+    /* visibility: hidden; */
+    display: none;
+  }
+
+  input.ng-invalid.ng-touched {
+    border: 1px solid red;
+  }
+</style>
