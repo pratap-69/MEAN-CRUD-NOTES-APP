@@ -1,7 +1,8 @@
 <form [formGroup]="myForm" (ngSubmit)="onSavePost()">
   <input class="col-md-3 form-control" type="text" placeholder="Title" formControlName="postTitle">
 
-  <span *ngIf="myForm.get('postTitle').invalid && myForm.get('postTitle').touched" class="">Please enter a valid
+  <span *ngIf="myForm.get('postTitle').invalid && myForm.get('postTitle').touched" style="color: red;">Please enter a
+    valid
     username! </span>
   <!-- <div *ngIf="myForm.controls.postTitle.errors.maxlength">
     Longer Text!
@@ -9,22 +10,22 @@
 
   <input class="col-md-3 form-control" type="text" placeholder="Description" formControlName="postContent">
 
-  <div *ngIf="myForm.get('postContent').hasError('required')">
+  <span *ngIf="myForm.get('postContent').invalid &&  myForm.get('postContent').touched" style="color: red;">
     Oops, please provide a Title!
+  </span>
+  <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+    <img [src]="imagePreview" [alt]="myForm.value.title">
   </div>
-
+  <br>
   <!-- <textarea class="col-md-4 form-control" placeholder="Description" [(ngModel)]="postContent" rows="3" style="margin-left: 10px;"></textarea> -->
-  <button class="btn btn-primary" type="submit"> Add Post </button>
-
+  <button class="btn btn-primary" type="submit" *ngIf="mode == 'create'"> Add Post </button>
+  <button *ngIf="mode == 'edit'" class="btn btn-primary" style="margin-left: 10px;"
+    type="submit"> Update Post</button>
   <button class="btn btn-primary" (click)="filePicker.click()" style="margin-left: 10px;">Upload Image</button>
-  <input type="file" #filePicker formControlName="postImage">
-
-  <button *ngIf="mode == 'edit'" class="btn btn-primary" (click)="onSavePost()" style="margin-left: 10px;"
-    routerLink="/allposts"> Update Post</button>
-
-  <button class="btn btn-secondary" routerLink="/allposts" style="margin-left: 10px;">Cancel</button>
-
+  <input type="file" #filePicker (change)="onImagePicked($event)">
+  <button class="btn btn-secondary" type="button" routerLink="/allposts" style="margin-left: 10px;">Cancel</button>
 </form>
+
 <style>
   input[type='file'] {
     /* visibility: hidden; */
@@ -33,5 +34,13 @@
 
   input.ng-invalid.ng-touched {
     border: 1px solid red;
+  }
+  .image-preview{
+    height: 5rem;
+    margin: 1rem 0;
+  }
+
+  .image-preview img{
+    height: 100%;
   }
 </style>
