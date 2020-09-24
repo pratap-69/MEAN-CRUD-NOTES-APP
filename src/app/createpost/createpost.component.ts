@@ -3,12 +3,14 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
+  NG_ASYNC_VALIDATORS,
   Validators,
 } from "@angular/forms";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { stringify } from "querystring";
 import { CRUDService } from "../crud.service";
 import { Post } from "../post";
+import { mimeType } from "./mime-type.validator";
 
 @Component({
   selector: "app-createpost",
@@ -33,9 +35,9 @@ export class CreatepostComponent implements OnInit {
 
   ngOnInit() {
     this.myForm = new FormGroup({
-      postTitle: new FormControl(null, [Validators.required]),
-      postContent: new FormControl(null, [Validators.required]),
-      postImage: new FormControl(null, [Validators.required]),
+      postTitle: new FormControl(null, { validators: [Validators.required]} ),
+      postContent: new FormControl(null, { validators: [Validators.required]}),
+      postImage: new FormControl(null, { validators:[Validators.required], asyncValidators:[mimeType] }),
     });
 
     //console.log(this.service.postDetails);

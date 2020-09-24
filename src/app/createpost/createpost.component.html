@@ -13,7 +13,7 @@
   <span *ngIf="myForm.get('postContent').invalid &&  myForm.get('postContent').touched" style="color: red;">
     Oops, please provide a Title!
   </span>
-  <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+  <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && myForm.get('postImage').valid">
     <img [src]="imagePreview" [alt]="myForm.value.title">
   </div>
   <br>
@@ -21,8 +21,10 @@
   <button class="btn btn-primary" type="submit" *ngIf="mode == 'create'"> Add Post </button>
   <button *ngIf="mode == 'edit'" class="btn btn-primary" style="margin-left: 10px;"
     type="submit"> Update Post</button>
-  <button class="btn btn-primary" (click)="filePicker.click()" style="margin-left: 10px;">Upload Image</button>
+
+  <button type="button" class="btn btn-primary" (click)="filePicker.click()" style="margin-left: 10px;">Upload Image</button>
   <input type="file" #filePicker (change)="onImagePicked($event)">
+
   <button class="btn btn-secondary" type="button" routerLink="/allposts" style="margin-left: 10px;">Cancel</button>
 </form>
 
