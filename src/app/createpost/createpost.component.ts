@@ -35,9 +35,12 @@ export class CreatepostComponent implements OnInit {
 
   ngOnInit() {
     this.myForm = new FormGroup({
-      postTitle: new FormControl(null, { validators: [Validators.required]} ),
-      postContent: new FormControl(null, { validators: [Validators.required]}),
-      postImage: new FormControl(null, { validators:[Validators.required], asyncValidators:[mimeType] }),
+      postTitle: new FormControl(null, { validators: [Validators.required] }),
+      postContent: new FormControl(null, { validators: [Validators.required] }),
+      postImage: new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: [mimeType],
+      }),
     });
 
     //console.log(this.service.postDetails);
@@ -81,37 +84,47 @@ export class CreatepostComponent implements OnInit {
   }
 
   onSavePost() {
-    console.log(this.myForm);
-    console.log("valid?", this.myForm.valid);
-    // console.log("title", form.value.Title);
-    // console.log("Email", form.value.Content);
-    //console.log('Message', form.value.message);
-    console.log("mode", this.mode);
+    if (this.myForm.invalid) {
+      alert("Invalid Form Please fill all details");
+    }
+    if (this.myForm.valid) {
+      console.log("valid?", this.myForm.valid);
+      // console.log("title", form.value.Title);
+      // console.log("Email", form.value.Content);
+      //console.log('Message', form.value.message);
+      console.log("mode", this.mode);
 
-    if (this.mode === "create") {
-      //console.log("add post");
-      const post: Post = {
-        id: "null",
-        title: this.myForm.get('postTitle').value,
-        content: this.myForm.get('postContent').value
-      };
-      this.service.addPost(post).subscribe((responseData) => {
-        //console.log(responseData);
-        post.id = responseData.CreatedPostId;
-        this.posts.push(post);
-        console.log(this.posts);
-        this.router.navigate(['allposts']);
-        // this.postTitle = "";
-        // this.postContent = "";
-      });
-    } else {
-      console.log("update post");
-      this.service
-        .updatePost(this.postId, this.myForm.get('postTitle').value, this.myForm.get('postContent').value)
-        .subscribe((result) => {
-          console.log(result);
-          this.router.navigate(['allposts']);
+      if (this.mode === "create") {
+        //console.log("add post");
+        const post: Post = {
+          id: "null",
+          title: this.myForm.get("postTitle").value,
+          content: this.myForm.get("postContent").value,
+          image: this.myForm.get("postImage").value,
+        };
+        this.service.addPost(post).subscribe((responseData) => {
+          console.log(responseData);
+          post.id = responseData.CreatedPostId;
+          this.posts.push(post);
+          console.log(this.posts);
+          this.router.navigate(["allposts"]);
+          // this.postTitle = "";
+          // this.postContent = "";
         });
+      } else {
+        console.log("update post");
+        this.service
+          .updatePost(
+            this.postId,
+            this.myForm.get("postTitle").value,
+            this.myForm.get("postContent").value,
+            this.myForm.get("postImage").value
+          )
+          .subscribe((result) => {
+            console.log(result);
+            this.router.navigate(["allposts"]);
+          });
+      }
     }
   }
   onImagePicked(event: Event) {

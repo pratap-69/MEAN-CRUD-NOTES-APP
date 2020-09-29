@@ -2,29 +2,66 @@ const express = require("express");
 const Post = require("../models/post");
 const router = express.Router();
 
-router.post("", (req, res, next) => {
-  //const post = req.body;
+const multer = require("multer");
 
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content,
-  });
+const MIME_TYPE_MAP = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "images/jpg": "jpg",
+};
 
-  // const product = new Product({
-  //   title: req.body.title,
-  //   content: req.body.content
-  // });
-
-  console.log(post);
-  //console.log(product);
-  post.save().then((response) => {
-    console.log(response);
-    res.status(200).json({
-      CreatedPostId: response._id,
-      message: "Post Added Successfully!",
-    });
-  });
+//Multer Configuration
+//Multer adds a body object and a file or files object to the request object.
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    //Extra Security Layer -> Invalid MIME Type
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    let error = new Error("Invalid mime type");
+    if (isValid) {
+      error = null;
+    }
+    callback(error, "backend/images");
+  },
+  filename: (req, file, callback) => {
+    const name = file.originalname.toLowerCase().split(" ").join("-");
+    const extension = MIME_TYPE_MAP[file.mimetype];
+    callback(null, name + "-" + Date.now() + "." + extension);
+  },
 });
+
+router
+.post("", multer({ storage: storage }).single("image"), (req, res, next) => {
+    //const post = req.body;
+    const url = req.protocol + '://' + req.get("host");
+    const post = new Post({
+      title: req.body.title,
+      content: req.body.content
+      // imagePath: url + "/images/" + req.file.filename
+    });
+
+    // const product = new Product({
+    //   title: req.body.title,
+    //   content: req.body.content
+    // });
+
+    console.log(post);
+    //console.log(product);
+    post.save().then((response) => {
+      console.log(response);
+      res.status(200).json({
+        CreatedPostId: response._id,
+        message: "Post Added Successfully!",
+        post:{
+          id: response._id,
+          // ...response
+          title: response.title,
+          content: response.content,
+          imagePath: null
+        }
+      });
+    });
+  }
+);
 
 router.get("", (req, res, next) => {
   // const posts = [

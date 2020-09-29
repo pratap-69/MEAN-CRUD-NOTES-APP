@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Post } from "./post";
+
 @Injectable({
   providedIn: "root",
 })
 export class CRUDService {
   constructor(private HttpClient: HttpClient) {}
   //public posts: Post[] = [];
-  public postDetails:Post;
+  public postDetails: Post;
   getPosts() {
     return this.HttpClient.get<{ message: string; data: any }>(
       "http://localhost:3000/api/posts"
@@ -15,9 +16,16 @@ export class CRUDService {
   }
 
   addPost(post: Post) {
-    return this.HttpClient.post<{ CreatedPostId: string; message: string }>(
+    //post in createcomponent
+    //Json can't include a file
+    //FormData can hold text and blobs(file values)
+    const postData = new FormData();
+    postData.append("title", post.title);
+    postData.append("content", post.content);
+    postData.append("image", post.image, post.title);
+    return this.HttpClient.post<{ CreatedPostId: string; message: string , post: Post }>(
       "http://localhost:3000/api/posts",
-      post
+      postData
     );
   }
 
@@ -33,8 +41,8 @@ export class CRUDService {
     );
   }
 
-  updatePost(id: string, title: string, content: string) {
-    const post: Post = { id: id, title: title, content: content };
+  updatePost(id: string, title: string, content: string, image: File) {
+    const post: Post = { id: id, title: title, content: content, image: image };
     return this.HttpClient.put("http://localhost:3000/api/posts", post);
   }
 }
