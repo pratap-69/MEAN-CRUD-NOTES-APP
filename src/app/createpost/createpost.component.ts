@@ -6,7 +6,7 @@ import {
   NG_ASYNC_VALIDATORS,
   Validators,
 } from "@angular/forms";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { ActivatedRoute, ParamMap, Router, RoutesRecognized  } from "@angular/router";
 import { stringify } from "querystring";
 import { CRUDService } from "../crud.service";
 import { Post } from "../post";
@@ -32,8 +32,19 @@ export class CreatepostComponent implements OnInit {
   public imagePreview;
   private postId: string;
   myForm: FormGroup;
-
+  //private routeData;
   ngOnInit() {
+    console.log(this.router.url);
+
+    //console.log(this.route.data);
+
+    // this.router.events.subscribe((data) => {
+    //   if (data instanceof RoutesRecognized) {
+    //     this.routeData = data.state.root.firstChild.data;
+    //     console.log(this.routeData);
+    //   }
+    // });
+
     this.myForm = new FormGroup({
       postTitle: new FormControl(null, { validators: [Validators.required] }),
       postContent: new FormControl(null, { validators: [Validators.required] }),
@@ -62,10 +73,11 @@ export class CreatepostComponent implements OnInit {
           console.log(result);
           // this.postTitle = result.title;
           // this.postContent = result.content;
+          this.imagePreview = result.imagePath;
           this.myForm.setValue({
             postTitle: result.title,
             postContent: result.content,
-            postImage: null,
+            postImage: result.imagePath,
           });
           console.log(this.myForm);
           //alert();
@@ -100,13 +112,16 @@ export class CreatepostComponent implements OnInit {
           id: "null",
           title: this.myForm.get("postTitle").value,
           content: this.myForm.get("postContent").value,
-          image: this.myForm.get("postImage").value,
+          imagePath: this.myForm.get("postImage").value,
         };
+        console.log(post);
+        console.log("Form Data");
+        console.log(this.myForm);
         this.service.addPost(post).subscribe((responseData) => {
-          console.log(responseData);
+          //console.log(responseData);
           post.id = responseData.CreatedPostId;
           this.posts.push(post);
-          console.log(this.posts);
+          //console.log(this.posts);
           this.router.navigate(["allposts"]);
           // this.postTitle = "";
           // this.postContent = "";

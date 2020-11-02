@@ -8,7 +8,8 @@ const routes: Routes = [
   { path: '', redirectTo: 'allposts', pathMatch: 'full' },
   { path: 'allposts', component: AllpostsComponent },
   { path: 'create', component: CreatepostComponent },
-  { path: 'editpost/:postId', component: CreatepostComponent }
+  { path: 'editpost/:postId', component: CreatepostComponent },
+  // { path: 'editpost/:postId', component: CreatepostComponent , data: { detailsPage: true }}
 ];
 
 @NgModule({

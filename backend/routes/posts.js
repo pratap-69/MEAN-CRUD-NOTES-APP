@@ -29,14 +29,16 @@ const storage = multer.diskStorage({
   },
 });
 
-router
-.post("", multer({ storage: storage }).single("image"), (req, res, next) => {
+router.post(
+  "",
+  multer({ storage: storage }).single("image"),
+  (req, res, next) => {
     //const post = req.body;
-    const url = req.protocol + '://' + req.get("host");
+    const url = req.protocol + "://" + req.get("host");
     const post = new Post({
       title: req.body.title,
-      content: req.body.content
-      // imagePath: url + "/images/" + req.file.filename
+      content: req.body.content,
+      imagePath: url + "/images/" + req.file.filename,
     });
 
     // const product = new Product({
@@ -51,13 +53,13 @@ router
       res.status(200).json({
         CreatedPostId: response._id,
         message: "Post Added Successfully!",
-        post:{
+        post: {
           id: response._id,
           // ...response
           title: response.title,
           content: response.content,
-          imagePath: null
-        }
+          imagePath: response.imagePath,
+        },
       });
     });
   }
@@ -112,20 +114,31 @@ router.delete("/:id", (req, res, next) => {
   });
 });
 
-router.put("", (req, res, next) => {
-  const post = new Post({
-    _id: req.body.id,
-    title: req.body.title,
-    content: req.body.content,
-  });
-
-  Post.updateOne({ _id: req.body.id }, post).then((result) => {
-    console.log(result);
-    res.status(200).json({
-      message: "Post Updated Successfully",
-      data: result,
+router.put(
+  "",
+  multer({ storage: storage }).single("image"),
+  (req, res, next) => {
+    console.log(req.file);
+    let imagePath = req.body.imagePath;
+    if (req.file) {
+      const url = req.protocol + "://" + req.get("host");
+      imagePath = url + "/images/" + req.file.filename;
+    }
+    const post = new Post({
+      _id: req.body.id,
+      title: req.body.title,
+      content: req.body.content,
+      imagePath: imagePath
     });
-  });
-});
+    console.log(post);
+    Post.updateOne({ _id: req.body.id }, post).then((result) => {
+      //console.log(result);
+      res.status(200).json({
+        message: "Post Updated Successfully",
+        data: result,
+      });
+    });
+  }
+);
 
 module.exports = router;

@@ -6,6 +6,10 @@ const app = express();
 
 const routes = require("./routes/posts");
 
+//Node Package to construct Path to backend Images
+const path = require("path");
+
+
 //Connect to MongoDB Database
 mongoose
   .connect(
@@ -26,6 +30,10 @@ const Post = require("./models/post");
 
 app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: false }));
+
+//To Access Local Images
+app.use("/images", express.static(path.join("backend/images")));
+
 app.use((req, res, next) => {
   //console.log("First Middleware");
   //add CORS

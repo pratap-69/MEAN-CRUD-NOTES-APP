@@ -22,11 +22,12 @@ export class CRUDService {
     const postData = new FormData();
     postData.append("title", post.title);
     postData.append("content", post.content);
-    postData.append("image", post.image, post.title);
-    return this.HttpClient.post<{ CreatedPostId: string; message: string , post: Post }>(
-      "http://localhost:3000/api/posts",
-      postData
-    );
+    postData.append("image", post.imagePath, post.title);
+    return this.HttpClient.post<{
+      CreatedPostId: string;
+      message: string;
+      post: Post;
+    }>("http://localhost:3000/api/posts", postData);
   }
 
   deletePost(postId: string) {
@@ -36,13 +37,39 @@ export class CRUDService {
 
   getPost(id: string) {
     console.log(id);
-    return this.HttpClient.get<{ id: string; title: string; content: string }>(
-      "http://localhost:3000/api/posts/" + id
-    );
+
+    return this.HttpClient.get<{
+      id: string;
+      title: string;
+      content: string;
+      imagePath: string;
+    }>("http://localhost:3000/api/posts/" + id);
   }
 
-  updatePost(id: string, title: string, content: string, image: File) {
-    const post: Post = { id: id, title: title, content: content, image: image };
+  updatePost(id: string, title: string, content: string, image: File | string) {
+    let post: Post | FormData;
+    if (typeof image === "object") {
+      post = new FormData();
+      post.append("id", id);
+      post.append("title", title);
+      post.append("content", content);
+      post.append("image", image, title);
+    } else {
+      post = {
+        id: id,
+        title: title,
+        content: content,
+        imagePath: image,
+      };
+    }
+
+    // const post: Post = {
+    //   id: id,
+    //   title: title,
+    //   content: content,
+    //   imagePath: image,
+    // };
+
     return this.HttpClient.put("http://localhost:3000/api/posts", post);
   }
 }
