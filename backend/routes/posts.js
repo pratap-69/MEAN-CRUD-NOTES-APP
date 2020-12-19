@@ -125,7 +125,7 @@ router.put(
       imagePath = url + "/images/" + req.file.filename;
     }
     const post = new Post({
-      _id: req.body.id,
+      _id: req.body._id,
       title: req.body.title,
       content: req.body.content,
       imagePath: imagePath

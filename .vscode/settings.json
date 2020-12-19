@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/86d7b098-c871-498c-9c42-39cbc6430953/resourceGroups/testAzure/providers/Microsoft.Web/sites/mean-crud",
+    "appService.deploySubpath": "."
+}
